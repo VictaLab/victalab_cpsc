@@ -115,6 +115,49 @@ class PlatformSprite(Sprite):
 			image = self.photo_image, anchor='nw')
 		self.coordinates = Coordinates(x, y, x+width, y+height)
 
+class StickManFigure(Sprite):
+	def __init__(self, game):
+		Sprite.__init__(self, game)
+		self.images_left = [
+			PhotoImage(file='stickman-L1.gif'),
+			PhotoImage(file='stickman-L2.gif'),
+			PhotoImage(file='stickman-L3.gif')
+		]
+		self.images_right = [
+			PhotoImage(file='stickman-R1.gif'),
+			PhotoImage(file='stickman-R2.gif'),
+			PhotoImage(file='stickman-R3.gif')
+		]
+		self.image = game.canvas.create_image(200, 470, \
+			image=self..images_left[0], anchor='nw')
+
+		self.speed_x = -2
+		self.speed_y = 0
+		self.current_image = 0
+		self.current_image_add = 1
+		self.jump_count = 0
+		self.last_time = time.time()
+		self.coordinates = Coordinates()
+
+		game.canvas.bind_all('<KeyPress-Left>', self.turn_left)
+		game.canvas.bind_all('<KeyPress-right>', self.turn_right)
+		game.canvas.bind_all('<Space>', self.jump)
+
+
+	def turn_left(self, evt):
+		if self.speed_y == 0:
+			self.speed_x = -2
+
+	def turn_right(self, evt):
+		if self.speed_y == 0:
+			self.speed_x = 2
+
+	def jump(self, evt):
+		if self.speed_y == 0:
+			self.speed_y = -4
+			self.jump_count = 0
+
+
 g = Game()
 platform1 = PlatformSprite(g, PhotoImage(file="platform1.gif"), 0, 480, 100, 10)
 platform2 = PlatformSprite(g, PhotoImage(file="platform1.gif"), 150, 440, 100, 10)
